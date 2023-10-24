@@ -19,11 +19,10 @@
 #include "Scene.h"
 #include "Background.h"
 #include "Player.h"
-#include "Hud.h"
 
 // ------------------------------------------------------------------------------
 
-enum ObjectIds { PLAYER, MISSILE, BLUE, GREEN, MAGENTA, ORANGE, WALLHIT };
+enum ObjectIds { PLAYER, MISSILE, BLUE, GREEN, MAGENTA, ORANGE, WALLHIT, TAIL };
 
 // ------------------------------------------------------------------------------
 
@@ -35,14 +34,13 @@ class GeoWars : public Game
 {
 private:
     Background * backg = nullptr;   // pano de fundo
-    Hud * hud = nullptr;            // painel de informações
     bool viewBBox = false;          // visualização das bouding boxes
 
 public:
     static Player * player;         // nave controlada pela jogador
-    static Audio * audio;           // sitema de áudio
+    //static Audio * audio;           // sitema de áudio
     static Scene * scene;           // cena do jogo
-    static bool viewHUD;            // visualização do painel
+    static std::vector<Player*> meuVetor;
 
     void Init();                    // inicialização
     void Update();                  // atualização
@@ -51,5 +49,6 @@ public:
 };
 
 // ---------------------------------------------------------------------------------
+
 
 #endif

@@ -59,8 +59,8 @@ void Missile::Update()
         // volume do som de destruição depende da distância para o jogador
         float distance = Point::Distance(Point(x, y), Point(player->X(), player->Y()));
         float level = (MaxDistance - distance) / MaxDistance * BaseVolume;
-        GeoWars::audio->Volume(HITWALL, level);
-        GeoWars::audio->Play(HITWALL);
+        //GeoWars::audio->Volume(HITWALL, level);
+        //GeoWars::audio->Play(HITWALL);
 
         // adiciona explosão na cena
         GeoWars::scene->Add(new WallHit(x,y), STATIC);

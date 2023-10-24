@@ -12,12 +12,19 @@
 #include "Green.h"
 #include "GeoWars.h"
 #include "Random.h" 
+#include "Tail.h"
+#include "Animation.h"
 
 // ---------------------------------------------------------------------------------
 
 Green::Green(Player * p): player(p)
 {
-    sprite = new Sprite("Resources/Green.png");
+    tileset = new TileSet("Resources/apple.png",9,8,1,2);
+    anim = new Animation(tileset, 0.120f, true);
+    uint seq[2] = { 0, 1 };
+    anim->Add(200, seq, 2);
+
+    sprite = new Sprite("Resources/apple.png");
     speed  = new Vector(0, 2.0f);
     BBox(new Circle(20.0f));
 
@@ -26,8 +33,8 @@ Green::Green(Player * p): player(p)
     distance = dist.Rand();
 
     // nasce em uma posição aleatória (canto inferior direito)
-    RandF posX{ game->Width() - 50, game->Width() };
-    RandF posY{ game->Height() - 50, game->Height() };
+    RandF posX{ 0, window->Width() };
+    RandF posY{ 0, window->Height() };
     MoveTo(posX.Rand(), posY.Rand());
 
     type = GREEN;
@@ -37,6 +44,8 @@ Green::Green(Player * p): player(p)
 
 Green::~Green()
 {
+    delete anim;
+    delete tileset;
     delete sprite;
     delete speed;
 }
@@ -45,14 +54,20 @@ Green::~Green()
 
 void Green::OnCollision(Object * obj)
 {
-    if (obj->Type() == MISSILE)
+    //if (obj->Type() == MISSILE)
+    //    GeoWars::scene->Delete(this, MOVING);
+
+    if (obj->Type() == PLAYER) {
         GeoWars::scene->Delete(this, MOVING);
+    }
 }
 
 // -------------------------------------------------------------------------------
 
 void Green::Update()
 {
+    anim->Select(200);
+    anim->NextFrame();
     // a magnitude do vetor target controla quão 
     // rápido o objeto converge para a direção do alvo
     float angle = Line::Angle(Point(x, y), Point(player->X(), player->Y()));
@@ -88,6 +103,11 @@ void Green::Update()
         MoveTo(game->Width() - 50, y);
     if (y > game->Height() - 50)
         MoveTo(x, game->Height() - 50);
+}
+
+void Green::Draw()
+{
+    anim->Draw(x, y, Layer::MIDDLE, 5.0f, 0);
 }
 
 // -------------------------------------------------------------------------------

@@ -17,45 +17,51 @@
 #include "Green.h"
 #include "Orange.h"
 #include "Delay.h"
+#include "Home.h"
+#include "Start.h"
+#include "Hud.h"
 
 // ------------------------------------------------------------------------------
-
 Player * GeoWars::player  = nullptr;
-Audio  * GeoWars::audio   = nullptr;
+//Audio  * GeoWars::audio   = nullptr;
 Scene  * GeoWars::scene   = nullptr;
-bool     GeoWars::viewHUD = false;
+std::vector<Player*> GeoWars::meuVetor;
 
 // ------------------------------------------------------------------------------
 
 void GeoWars::Init() 
 {
-    // cria sistema de áudio
-    audio = new Audio();
-    audio->Add(THEME, "Resources/Theme.wav");
-    audio->Add(FIRE, "Resources/Fire.wav");
-    audio->Add(HITWALL, "Resources/Hitwall.wav");
-    audio->Add(EXPLODE, "Resources/Explode.wav");
-    audio->Add(START, "Resources/Start.wav");
+    Start::pontos = 0;
 
-    // ajusta volumes
-    audio->Volume(FIRE, 0.2f);
-    audio->Volume(START, 0.8f);
+    // cria sistema de áudio
+    //audio = new Audio();
+    //audio->Add(THEME, "Resources/Theme.wav");
+    //audio->Add(FIRE, "Resources/Fire.wav");
+    //audio->Add(HITWALL, "Resources/Hitwall.wav");
+    //audio->Add(EXPLODE, "Resources/Explode.wav");
+    //audio->Add(START, "Resources/Start.wav");
+
+    //// ajusta volumes
+    //audio->Volume(FIRE, 0.2f);
+    //audio->Volume(START, 0.8f);
 
     // carrega/incializa objetos
-    backg   = new Background("Resources/Space.jpg");
+    backg   = new Background("Resources/back3.png");
     player  = new Player();
     scene   = new Scene();
 
-    // cria o painel de informações
-    hud = new Hud();
 
     // adiciona objetos na cena (sem colisão)
     scene->Add(player, STATIC);
-    scene->Add(new Magenta(player), STATIC);
-    scene->Add(new Blue(player), STATIC);
-    scene->Add(new Green(player), STATIC);
-    scene->Add(new Orange(player), STATIC);
-    scene->Add(new Delay(), STATIC);
+    meuVetor.push_back(player);
+    //scene->Add(new Magenta(player), STATIC);
+    //scene->Add(new Blue(player), STATIC);
+    scene->Add(new Green(player), MOVING);
+    //scene->Add(new Green(player), MOVING);
+    //scene->Add(new Green(player), MOVING);
+    //scene->Add(new Green(player), MOVING);
+    //scene->Add(new Orange(player), STATIC);
+    //scene->Add(new Delay(), STATIC);
 
     // ----------------------
     // inicializa a viewport
@@ -76,6 +82,7 @@ void GeoWars::Init()
 
 void GeoWars::Update()
 {
+
     // sai com o pressionamento da tecla ESC
     if (window->KeyDown(VK_ESCAPE))
         window->Close();
@@ -87,10 +94,6 @@ void GeoWars::Update()
     // ativa ou desativa a bounding box
     if (window->KeyPress('B'))
         viewBBox = !viewBBox;
-
-    // ativa ou desativa o heads up display
-    if (window->KeyPress('H'))
-        viewHUD = !viewHUD;
 
     // --------------------
     // atualiza a viewport
@@ -133,10 +136,7 @@ void GeoWars::Draw()
 
     // desenha a cena
     scene->Draw();
-
-    // desenha painel de informações
-    if (viewHUD)
-        hud->Draw();
+    Start::hud->Draw();
 
     // desenha bounding box
     if (viewBBox)
@@ -147,46 +147,43 @@ void GeoWars::Draw()
 
 void GeoWars::Finalize()
 {
-    delete audio;
-    delete hud;
+    //delete audio;
     delete scene;
     delete backg;
 }
-
 
 // ------------------------------------------------------------------------------
 //                                  WinMain                                      
 // ------------------------------------------------------------------------------
 
-int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
-                     _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
-{
-    // cria motor do jogo
-    Engine * engine = new Engine();
-
-    // configura motor
-    //engine->window->Mode(WINDOWED);
-    //engine->window->Size(1152, 648);
-    engine->window->Mode(BORDERLESS);
-    engine->window->Color(0, 0, 0);
-    engine->window->Title("GeoWars");
-    engine->window->Icon(IDI_ICON);
-    engine->window->Cursor(IDC_CURSOR);
-    engine->window->HideCursor(true);
-    //engine->graphics->VSync(true);
-
-    // cria o jogo
-    Game * game = new GeoWars();
-
-    // configura o jogo
-    game->Size(3840, 2160);
-    
-    // inicia execução
-    int status = engine->Start(game);
-
-    // destrói motor e encerra jogo
-    delete engine;
-    return status;
-}
-
+//int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
+//    _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
+//{
+//    // cria motor do jogo
+//    Engine* engine = new Engine();
+//
+//    // configura motor
+//    //engine->window->Mode(WINDOWED);
+//    engine->window->Size(1920, 1080);
+//    engine->window->Mode(BORDERLESS);
+//    engine->window->Color(0, 0, 0);
+//    engine->window->Title("Snake Game");
+//    engine->window->Icon(IDI_ICON);
+//    engine->window->Cursor(IDC_CURSOR);
+//    engine->window->HideCursor(true);
+//    //engine->graphics->VSync(true);
+//
+//    // cria o jogo
+//    Game* game = new GeoWars();
+//
+//    // configura o jogo
+//    //game->Size(1920, 1080);
+//
+//    // inicia execução
+//    int status = engine->Start(game);
+//
+//    // destrói motor e encerra jogo
+//    delete engine;
+//    return status;
+//}
 // ----------------------------------------------------------------------------

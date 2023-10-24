@@ -18,22 +18,30 @@
 #include "Sprite.h"                        // desenho de sprites
 #include "Vector.h"                        // representação de vetores
 #include "Particles.h"                    // sistema de partículas
+#include "Controller.h"                 // entrada pelo controle
 
 // ---------------------------------------------------------------------------------
-
+enum eDirection { STOP, LEFT, RIGHT, UP, DOWN };
 class Player : public Object
 {
 private:
-    Sprite * sprite;                    // sprite do objeto
+
     Particles * tail;                   // calda do jogador
+
+    Controller* gamepad;               // leitura do controle
+    bool gamepadOn;                     // controle está ligado
 
 public:
     Vector * speed;                     // velocidade e direção
+    Sprite* sprite;                    // sprite do objeto
+    eDirection dir;
+    float vel;
 
     Player();                           // construtor
     ~Player();                          // destrutor
     
     void Move(Vector && v);             // movimenta jogador
+    void OnCollision(Object* obj);      // resolução da colisão
     void Update();                      // atualização
     void Draw();                        // desenho
 }; 

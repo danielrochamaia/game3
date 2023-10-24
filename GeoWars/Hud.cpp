@@ -1,88 +1,88 @@
-/**********************************************************************************
-// Hud (Código Fonte)
-//
-// Criação:     02 Ago 2019
-// Atualização: 01 Nov 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Heads Up Display
-//
-**********************************************************************************/
-
 #include "Hud.h"
-#include "GeoWars.h"
-
-// ------------------------------------------------------------------------------
+#include "Start.h"
 
 Hud::Hud()
 {
-    // cria fonte para exibição de texto
-    font = new Font("Resources/Tahoma14.png");
-    font->Spacing("Resources/Tahoma14.dat");
-    bold = new Font("Resources/Tahoma14b.png");
-    bold->Spacing("Resources/Tahoma14b.dat");
+	fonte = new Font("Resources/Agency30.png");
+	fonte->Spacing("Resources/Agency30.dat");
 
-    // carrega sprites
-    infoBox = new Sprite("Resources/InfoBox.png");
-    keyMap = new Sprite("Resources/Keymap.png");
+	time = 100;
+
+	timer.Start();
+	float delta = 24.0f;
+	float init = -24.0f;
 }
-
-// ------------------------------------------------------------------------------
 
 Hud::~Hud()
 {
-    delete font;
-    delete bold;
-    delete infoBox;
-    delete keyMap;
+	delete fonte;
 }
-
-// -------------------------------------------------------------------------------
 
 void Hud::Update()
 {
+	if (!stopped && timer.Elapsed() > 1.0f) {
+		time--;
+		timer.Reset();
+
+		if (time < 0)
+			time = 0;
+	}
 
 }
 
-// -------------------------------------------------------------------------------
+void Hud::Draw() {
 
-void Hud::Draw()
+	//text.str("");
+	//text << "Tempo";
+	//fonte->Draw(window->Width() - 48.0f, 30.0f, text.str());
+
+	text.str("");
+	text.width(3);
+	text.fill('0');
+	text << Start::pontos;
+	fonte->Draw(window->Width() - 50.0f, 60.0f, text.str());
+
+	//text.str("");
+	//text << "Pontuação";
+	//fonte->Draw(40.0f, 30.0f, text.str());
+
+	//text.str("");
+	//text.width(4);
+	//text.fill('0');
+	//text << Start::pontos;
+	//fonte->Draw(60.0f, 60.0f, text.str());
+}
+
+void Hud::Draw(float x, float y) {
+
+	//text.str("");
+	//text << "Tempo";
+	//fonte->Draw(window->Width() - 48.0f, 30.0f, text.str());
+
+	text.str("");
+	text.width(3);
+	text.fill('0');
+	text << Start::pontos;
+	fonte->Draw(x, y, text.str());
+
+	//text.str("");
+	//text << "Pontuação";
+	//fonte->Draw(40.0f, 30.0f, text.str());
+
+	//text.str("");
+	//text.width(4);
+	//text.fill('0');
+	//text << Start::pontos;
+	//fonte->Draw(60.0f, 60.0f, text.str());
+}
+
+void Hud::ResetTime()
 {
-    // desenha elementos da interface
-    infoBox->Draw(game->viewport.left + 140, game->viewport.top + 100, Layer::FRONT);
-    keyMap->Draw(game->viewport.left + window->CenterX(), game->viewport.top + window->Height() - 16.0f, Layer::FRONT);
-
-    // define cor do texto
-    Color textColor{ 0.7f, 0.7f, 0.7f, 1.0f };
-
-    // desenha texto
-    text.str("");
-    text << "Geometry Wars";
-    bold->Draw(40, 62, text.str(), textColor);
-
-    text.str("");
-    text << "Janela: " << window->Width() << " x " << window->Height();
-    font->Draw(40, 92, text.str(), textColor);
-
-    text.str("");
-    text << "Mundo: " << game->Width() << " x " << game->Height();
-    font->Draw(40, 112, text.str(), textColor);
-
-    text.str("");
-    text << "Viewport: (" << uint(game->viewport.left) << "," << uint(game->viewport.top) << ") a (" << uint(game->viewport.right) << "," << uint(game->viewport.bottom) << ")";
-    font->Draw(40, 132, text.str(), textColor);
-
-    text.str("");
-    text << "Mísseis: " << GeoWars::scene->Size() - 5;
-    font->Draw(40, 152, text.str(), textColor);
-
-    text.str("");
-    text << "Movimento";
-    bold->Draw(window->CenterX() - 84.0f, window->Height() - 7.0f, text.str(), textColor);
-
-    text.str("");
-    text << "Disparo";
-    bold->Draw(window->CenterX() + 115.0f, window->Height() - 7.0f, text.str(), textColor);
+	stopped = false;
+	timer.Start();
+	time = 100;
 }
 
-// -------------------------------------------------------------------------------
+uint Hud::Time() {
+	return time;
+}

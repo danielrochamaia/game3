@@ -19,6 +19,7 @@
 #include "Sprite.h"
 #include "Vector.h"
 #include "Player.h"
+#include "Animation.h"  
 
 // ---------------------------------------------------------------------------------
 
@@ -29,6 +30,9 @@ private:
     Vector * speed;                     // velocidade e direção
     Player * player;                    // ponteiro para jogador
     int distance;                       // mantém distância do jogador
+    TileSet* tileset;                // folha de sprites do personagem
+    //TileSet   * player1TileSet;                // folha de sprites do personagem
+    Animation* anim;                   // animação do personagem
     
 public:
     Green(Player * p);                  // construtor
@@ -40,10 +44,6 @@ public:
 }; 
 
 // ---------------------------------------------------------------------------------
-
-inline void Green::Draw()
-{ sprite->Draw(x, y, Layer::LOWER, scale, rotation); }
-
 // ---------------------------------------------------------------------------------
 
 

@@ -1,45 +1,34 @@
-/**********************************************************************************
-// Hud (Arquivo de Cabeçalho)
-//
-// Criação:     02 Ago 2019
-// Atualização: 01 Nov 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Heads Up Display
-//
-**********************************************************************************/
+#ifndef _HUD_H_
+#define _HUD_H_
 
-#ifndef _GEOWARS_HUD_H_
-#define _GEOWARS_HUD_H_
-
-// --------------------------------------------------------------------------------
-
-#include "Object.h"
-#include "Sprite.h"
 #include "Font.h"
+#include "Object.h"
+#include "Timer.h"
 #include <sstream>
-using std::stringstream;
 
-// --------------------------------------------------------------------------------
+using std::stringstream;
 
 class Hud : public Object
 {
 private:
-    Font * font = nullptr;              // fonte para exibição normal
-    Font * bold = nullptr;              // fonte para exibição negrito
-    Sprite * infoBox = nullptr;         // área de informações do jogo
-    Sprite * keyMap = nullptr;          // área para teclas de comando
-    stringstream text;                  // texto temporário
+    Font* fonte;
+    Timer     timer;
+    stringstream text;
+
+    uint time;
+    bool stopped;
 
 public:
-    Hud();                              // construtor
-    ~Hud();                             // destrutor
+    Hud();
+    ~Hud();
 
-    void Update();                      // atualização
-    void Draw();                        // desenho
+    void Update();
+    void Draw();
+    void Draw(float x, float y);
+
+    void Stop() { stopped = true; };
+    void ResetTime();
+    uint Time();
 };
 
-// ------------------------------------------------------------------------------
-
 #endif
-
